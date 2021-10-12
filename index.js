@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 require('dotenv').config()
+const history = require('connect-history-api-fallback')
 
 const app = express()
 
@@ -42,6 +43,7 @@ characterSchema.set('toJSON', {
 const Character = mongoose.model('Character', characterSchema)
 
 app.use(express.json())
+app.use(history())
 app.use(express.static('build'))
 app.use(morgan_settings)
 app.use(cors())
