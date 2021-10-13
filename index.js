@@ -31,8 +31,10 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 3
-  }
+  },
+  attributes: { type: Map, of: String }
 })
+
 characterSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
@@ -73,6 +75,22 @@ app.get('/api/characters/:id', async (req, resp, next) => {
   }
 })
 
+app.put('/api/characters/:id', async (req, resp, next) => {
+  const id = req.params.id
+  const character = Character.findById(id)
+
+  console.log('updating character:', req.body)
+
+  try {
+    const character = await Character.findByIdAndUpdate(id, req.body)
+
+    resp.status(200).json(character)
+  }
+  catch (error) {
+    next(error)
+  }
+})
+
 const unknownEndpoint = (req, resp, next) => {
   console.log(req)
   resp.status(404).send({ error: 'unknown endpoint' })
@@ -83,7 +101,7 @@ const errorHandler = (error, req, resp, next) => {
   console.log(error.message)
 
   if (error.name === 'CastError') {
-    return resp.status(400).send({ error: 'malformatted id' })
+    return resp.status(400).send({ error: 'Non-existing or malformatted id' })
   }
   else if ( error.name === 'ValidationError') {
     return resp.status(400).send({ error: error.message })
