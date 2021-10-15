@@ -100,6 +100,7 @@ const unknownEndpoint = (req, resp, next) => {
 const errorHandler = (error, req, resp, next) => {
   console.log(error.message)
 
+  //Neither errormessage is making it to the frontend, I'm just getting 'Request failed with status code 400'
   if (error.name === 'CastError') {
     return resp.status(400).send({ error: 'Non-existing or malformatted id' })
   }
