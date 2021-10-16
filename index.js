@@ -77,14 +77,12 @@ app.get('/api/characters/:id', async (req, resp, next) => {
 
 app.put('/api/characters/:id', async (req, resp, next) => {
   const id = req.params.id
-  const character = Character.findById(id)
-
-  console.log('updating character:', req.body)
 
   try {
-    const character = await Character.findByIdAndUpdate(id, req.body)
+    await Character.findByIdAndUpdate(id, req.body)
+    console.log('updated character:', req.body)
 
-    resp.status(200).json(character)
+    resp.status(200).end()
   }
   catch (error) {
     next(error)
