@@ -51,7 +51,7 @@ app.use(morgan_settings)
 app.use(cors())
 
 app.post('/api/characters', async (req, resp, next) => {
-  const character = new Character({ name: req.body.name })
+  const character = new Character({ name: req.body.name, attributes: {} })
 
   try {
     const savedCharacter = await character.save()
