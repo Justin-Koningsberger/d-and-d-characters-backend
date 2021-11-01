@@ -32,7 +32,12 @@ const characterSchema = new mongoose.Schema({
     required: true,
     minLength: 3
   },
-  attributes: { type: Map, of: String }
+  attributes: { type: Map, of: String },
+  weapons: [{
+    name: String,
+    bonus: Number,
+    damage: String
+  }]
 })
 
 characterSchema.set('toJSON', {
@@ -51,7 +56,7 @@ app.use(morgan_settings)
 app.use(cors())
 
 app.post('/api/characters', async (req, resp, next) => {
-  const character = new Character({ name: req.body.name, attributes: {} })
+  const character = new Character({ name: req.body.name, attributes: {}, weapons: [{},{},{}] })
 
   try {
     const savedCharacter = await character.save()
